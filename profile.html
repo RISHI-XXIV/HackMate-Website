@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Profile Registration</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2 {
+            text-align: center;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        input {
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        .student {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+<main>
+    <div class="container">
+        <h1>Student Registration</h1>
+        <form id="registrationForm">
+            <input type="text" id="name" placeholder="Name" required>
+            <input type="text" id="collegeName" placeholder="College Name" required>
+            <div class="skill-set">
+                <h3>Web Development</h3>
+                <label><input type="checkbox" name="web-skills" value="HTML"> HTML</label><br>
+                <label><input type="checkbox" name="web-skills" value="CSS"> CSS</label><br>
+                <label><input type="checkbox" name="web-skills" value="JavaScript"> JavaScript</label><br>
+                <label><input type="checkbox" name="web-skills" value="React"> React</label><br>
+                <input type="text" class="other-skill" name="web-other" placeholder="Other (Please specify)">
+            </div>
+
+            <div class="skill-set">
+                <h3>Data Science</h3>
+                <label><input type="checkbox" name="data-skills" value="Python"> Python</label><br>
+                <label><input type="checkbox" name="data-skills" value="R"> R</label><br>
+                <label><input type="checkbox" name="data-skills" value="SQL"> SQL</label><br>
+                <label><input type="checkbox" name="data-skills" value="Machine Learning"> Machine Learning</label><br>
+                <input type="text" class="other-skill" name="data-other" placeholder="Other (Please specify)">
+            </div>
+
+            <div class="skill-set">
+                <h3>Mobile Development</h3>
+                <label><input type="checkbox" name="mobile-skills" value="Android"> Android</label><br>
+                <label><input type="checkbox" name="mobile-skills" value="iOS"> iOS</label><br>
+                <label><input type="checkbox" name="mobile-skills" value="Flutter"> Flutter</label><br>
+                <input type="text" class="other-skill" name="mobile-other" placeholder="Other (Please specify)">
+            </div>
+
+            <div class="skill-set">
+                <h3>Other Skills</h3>
+                <label><input type="checkbox" name="other-skills" value="DevOps"> DevOps</label><br>
+                <label><input type="checkbox" name="other-skills" value="Cloud Computing"> Cloud Computing</label><br>
+                <label><input type="checkbox" name="other-skills" value="Cybersecurity"> Cybersecurity</label><br>
+                <input type="text" class="other-skill" name="other-other" placeholder="Other (Please specify)">
+            </div>
+
+            <button type="submit">Submit</button>
+        </form>
+
+        <h2>Registered Students</h2>
+        <div id="studentList"></div>
+    </div>
+
+    <script>
+        document.getElementById('registrationForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            const name = document.getElementById('name').value;
+            const collegeName = document.getElementById('collegeName').value;
+
+            // Collect selected skills
+            const skills = [];
+            const skillSets = document.querySelectorAll('.skill-set');
+            skillSets.forEach(skillSet => {
+                const checkboxes = skillSet.querySelectorAll('input[type="checkbox"]:checked');
+                checkboxes.forEach(checkbox => {
+                    skills.push(checkbox.value);
+                });
+                const otherSkillInput = skillSet.querySelector('.other-skill');
+                if (otherSkillInput.value) {
+                    skills.push(otherSkillInput.value);
+                }
+            });
+
+            const student = { name, collegeName, skills };
+            saveStudent(student);
+            displayStudents();
+            this.reset(); // Clear the form
+        });
+
+        function saveStudent(student) {
+            let students = JSON.parse(localStorage.getItem('students')) || [];
+            students.push(student);
+            localStorage.setItem('students', JSON.stringify(students));
+        }
+
+        function displayStudents() {
+            const studentList = document.getElementById('studentList');
+            studentList.innerHTML = ''; // Clear the list before displaying
+
+            const students = JSON.parse(localStorage.getItem('students')) || [];
+            if (students.length === 0) {
+                studentList.innerHTML = '<p>No students registered yet.</p>';
+                return;
+            }
+
+            students.forEach(student => {
+                const div = document.createElement('div');
+                div.classList.add('student');
+                div.innerHTML = `<strong>Name:</strong> ${student.name} <br>
+                                 <strong>College Name:</strong> ${student.collegeName} <br>
+                                 <strong>Skills:</strong> ${student.skills.join(', ')}`;
+                studentList.appendChild(div);
+            });
+        }
+
+        // Display students on page load
+        document.addEventListener('DOMContentLoaded', displayStudents);
+    </script>
+</main>
+</body>
+</html>
