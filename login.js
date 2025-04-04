@@ -25,4 +25,8 @@ document.getElementById("loginForm").addEventListener("submit", function (event)
         }
     })
     .catch((error) => console.error("Error:", error));
+<<<<<<< HEAD
 });
+=======
+});
+>>>>>>> 414802f065954021eb2dafa212b4a607b0d356e6

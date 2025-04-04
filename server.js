@@ -70,4 +70,8 @@ app.post("/login", (req, res) => {
 // Start Server
 app.listen(5000, () => {
   console.log("Server running on port 5000");
+<<<<<<< HEAD
 });
+=======
+});
+>>>>>>> 414802f065954021eb2dafa212b4a607b0d356e6
